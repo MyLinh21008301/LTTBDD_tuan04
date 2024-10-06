@@ -1,12 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Tab1 from './tabs/tab1';  
+import Tab2 from './tabs/tab2';
+import Tab3 from './tabs/tab3';
+import Tab4 from './tabs/tab4';
+import { StyleSheet } from 'react-native';
+import React, { useState } from 'react'; 
 
+
+
+const Stack = createNativeStackNavigator();
 export default function App() {
+  const [userData, setUserData] = useState([]);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Tab1' screenOptions={{headerShown: false}}>
+        <Stack.Screen name='Tab1' component={Tab1}/>
+        <Stack.Screen name='Tab2'>
+          {props => <Tab2 {...props} userData={userData} setUserData={setUserData} />}
+        </Stack.Screen>
+        <Stack.Screen name='Tab3'>
+          {props => <Tab3 {...props} userData={userData} setUserData={setUserData} />}
+        </Stack.Screen>
+        <Stack.Screen name='Tab4' component={Tab4}/>
+      </Stack.Navigator>  
+    </NavigationContainer>
   );
 }
 
