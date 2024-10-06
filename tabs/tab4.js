@@ -90,7 +90,7 @@ export default function App({ navigation }) {
 
     setTimeout(() => {
       setPressedButton(null);
-    }, 300); // 300ms
+    }, 300);
   };
 
   const handleImageSelect = (index) => {
@@ -106,7 +106,7 @@ export default function App({ navigation }) {
       <TouchableOpacity style={styles.backButton}
         onPress={() => { navigation.navigate("Tab3") }}
       >
-        <Image source={require('../assets/img/BackBtn.png')} style={styles.back} />
+        <Image source={require('../assets/img/Back2.png')} style={styles.backTop} />
         <Text style={styles.productTitle}>{productName}</Text>
       </TouchableOpacity>
 
@@ -144,14 +144,18 @@ export default function App({ navigation }) {
           </View>
         </View>
 
-        <Text style={styles.productName}>{productName}</Text>
+        <View style={styles.productAndRatingContainer}>
+          <View>
+            <Text style={styles.productName}>{productName}</Text>
+            <Text style={styles.productDesc} >Occaecat est deserunt tempor offici</Text>
+          </View>
 
-        {/* Rating */}
-        <View style={styles.ratingContainer}>
-          <Image source={require('../assets/img/Rating_3.png')} style={styles.ratingImage} />
-          <Text style={styles.rating}>{rating}</Text>
+          {/* Rating */}
+          <View style={styles.ratingContainer}>
+            <Image source={require('../assets/img/Rating_3.png')} style={styles.ratingImage} />
+            <Text style={styles.rating}>{rating}</Text>
+          </View>
         </View>
-
         {/* Size Selector */}
         <Text style={styles.label}>Size</Text>
         <View style={styles.sizeContainer}>
@@ -170,26 +174,43 @@ export default function App({ navigation }) {
 
         {/* Quantity Selector */}
         <Text style={styles.label}>Quantity</Text>
-        <View style={styles.quantityContainer}>
-          <TouchableOpacity onPress={decreaseQuantity}
-            style={[
-              styles.quantityButton,
-              pressedButton === 'decrease' && styles.pressedButton,
-            ]}>
-            <Text style={styles.quantityText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.quantity}>{quantity}</Text>
-          <TouchableOpacity onPress={increaseQuantity}
-            style={[
-              styles.quantityButton,
-              pressedButton === 'increase' && styles.pressedButton,
-            ]}>
-            <Text style={styles.quantityText}>+</Text>
-          </TouchableOpacity>
+        <View style={styles.qtAndTotal}> 
+          <View style={styles.quantityContainer}>
+            <TouchableOpacity onPress={decreaseQuantity}
+              style={[
+                styles.quantityButton,
+                pressedButton === 'decrease' && styles.pressedButton,
+              ]}>
+              <Text style={styles.quantityText}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.quantity}>{quantity}</Text>
+            <TouchableOpacity onPress={increaseQuantity}
+              style={[
+                styles.quantityButton,
+                pressedButton === 'increase' && styles.pressedButton,
+              ]}>
+              <Text style={styles.quantityText}>+</Text>
+            </TouchableOpacity>
+          </View>
+          {/* Total */}
+          <Text style={styles.total}>Total: ${calculatePrice().toFixed(2)}</Text>
         </View>
 
-        {/* Total */}
-        <Text style={styles.total}>Total: ${calculatePrice().toFixed(2)}</Text>
+
+
+
+        <Image source={require('../assets/img/Line_4.png')} style={styles.line} />
+        <View style={styles.boxContainer}>
+          <Text style={styles.rating}>Size guide</Text>
+          <Image source={require('../assets/img/Back1.png')} style={styles.back} />
+        </View>
+        <Image source={require('../assets/img/Line_4.png')} style={styles.line} />
+        <View style={styles.boxContainer}>
+          <Text style={styles.rating}>Reviews(99)</Text>
+          <Image source={require('../assets/img/Back1.png')} style={styles.back} />
+        </View>
+        <Image source={require('../assets/img/Line_4.png')} style={styles.line} />
+
 
         {/* Add to Cart Button */}
         <TouchableOpacity
@@ -220,9 +241,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginRight: 8,
   },
-  back: {
-    width: 50,
-    height: 50
+  backTop: {
+    width: 30,
+    height: 30,
+    marginRight:10,
   },
   productTitle: {
     fontSize: 18,
@@ -235,8 +257,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   smallProductImage: {
-    width: 75,
-    height: 70,
+    width: 73,
+    height: 65,
     marginHorizontal: 8,
     borderRadius: 10,
     borderWidth: 1,
@@ -265,11 +287,11 @@ const styles = StyleSheet.create({
   promoText: {
     fontSize: 12,
     color: '#ff0000',
-    padding: 10,
+    padding: 7,
 
   },
   productName: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     marginVertical: 8,
   },
@@ -277,13 +299,25 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     marginBottom: 16,
   },
-  rating:{
+  ratingImage: {
+  },
+  rating: {
     fontSize: 16,
+    marginLeft: 5,
     fontWeight: 'bold',
   },
+  productAndRatingContainer: {
+    flexDirection: 'row', // Đặt các phần tử nằm ngang
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  ratingContainer: {
+    flexDirection: 'row', // Đặt hình ảnh và điểm rating nằm ngang
+    alignItems: 'center',
+  },
   label: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
     marginVertical: 8,
   },
   sizeContainer: {
@@ -294,7 +328,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 6,
     // marginRight: 8,
   },
   sizeBoxSelected: {
@@ -312,6 +346,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#00c0ff',
   },
+  qtAndTotal:{
+    flexDirection:'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -320,17 +359,13 @@ const styles = StyleSheet.create({
   quantityButton: {
     borderWidth: 1,
     borderColor: '#ddd',
-    paddingHorizontal: 18,
-    paddingVertical: 12,
+    paddingHorizontal: 13,
+    paddingVertical: 8,
     borderRadius: 30,
     marginHorizontal: 8,
   },
-  quantityText: {
-    fontSize: 16,
-  },
   quantity: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
   },
   pressedButton: {
     backgroundColor: '#5CC1D6',
@@ -341,11 +376,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 16,
   },
+  line: {
+    height: 2,
+    width: 330,
+  },
+  boxContainer: {
+    height: 50,
+    width: 330,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  back: {
+    height: 20,
+    width: 20,
+  },
   addButton: {
     backgroundColor: '#5CC1D6',
-    padding: 16,
+    padding: 14,
     borderRadius: 8,
     alignItems: 'center',
+    marginTop: 10
   },
   addButtonText: {
     color: '#fff',
