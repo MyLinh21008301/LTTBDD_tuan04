@@ -11,29 +11,43 @@ export default function App({ navigation }) {
     {
       smallImage: require('../assets/img/Image_7.png'),
       largeImage: require('../assets/img/Container_7.png'),
+      productName: 'Orange',
+      price: 4.99,
+      rating: 4.5,
     },
     {
       smallImage: require('../assets/img/Image_8.png'),
       largeImage: require('../assets/img/Container_8.png'),
+      productName: 'Candy',
+      price: 3.99,
+      rating: 4.0,
     },
     {
       smallImage: require('../assets/img/Image_9.png'),
       largeImage: require('../assets/img/Container_9.png'),
+      productName: 'Donut',
+      price: 2.99,
+      rating: 4.2,
     },
     {
       smallImage: require('../assets/img/Image_6.png'),
       largeImage: require('../assets/img/Container_6.png'),
+      productName: 'Cherry',
+      price: 5.99,
+      rating: 4.8,
     },
   ];
-  const [selectedImage, setSelectedImage] = useState(productImages[2].largeImage); // Mặc định là hình thứ 3
+  const [selectedImage, setSelectedImage] = useState(productImages[2].largeImage);
   const [selectedIndex, setSelectedIndex] = useState(2);
-  const basePrice = 2.99;
+  const [productName, setProductName] = useState(productImages[2].productName);
+  const [price, setPrice] = useState(productImages[2].price);
+  const [rating, setRating] = useState(productImages[2].rating);
+  const basePrice = price;
 
   const calculatePrice = () => {
     return calculateUnitPrice() * quantity;
   };
 
-  // Hàm tính đơn giá dựa trên kích thước
   const calculateUnitPrice = () => {
     let sizeIncrement = 0;
     switch (selectedSize) {
@@ -70,15 +84,21 @@ export default function App({ navigation }) {
       handleButtonPress('decrease');
     }
   };
-
   // Hàm xử lý việc nhấn nút và đổi màu
   const handleButtonPress = (buttonType) => {
     setPressedButton(buttonType);
 
-    // Sau 200ms, đổi lại trạng thái để nút trở về màu ban đầu
     setTimeout(() => {
       setPressedButton(null);
     }, 300); // 300ms
+  };
+
+  const handleImageSelect = (index) => {
+    setSelectedImage(productImages[index].largeImage);
+    setSelectedIndex(index);
+    setProductName(productImages[index].productName);
+    setPrice(productImages[index].price);
+    setRating(productImages[index].rating);
   };
   return (
     <View style={styles.container}>
@@ -87,28 +107,24 @@ export default function App({ navigation }) {
         onPress={() => { navigation.navigate("Tab3") }}
       >
         <Image source={require('../assets/img/BackBtn.png')} style={styles.back} />
-        <Text style={styles.productTitle}>Orange</Text>
+        <Text style={styles.productTitle}>{productName}</Text>
       </TouchableOpacity>
 
       {/* Product Image (hình ảnh lớn) */}
       <Image source={selectedImage} style={styles.productImage} />
-
 
       {/* Small Images */}
       <FlatList
         data={productImages}
         renderItem={({ item, index }) => (
           <TouchableOpacity
-            onPress={() => {
-              setSelectedImage(item.largeImage); // Cập nhật hình lớn khi nhấn
-              setSelectedIndex(index); // Lưu lại chỉ số hình ảnh để thay đổi viền
-            }}
+            onPress={() => handleImageSelect(index)}
           >
             <Image
-              source={item.smallImage} // Sử dụng hình nhỏ để hiển thị
+              source={item.smallImage}
               style={[
                 styles.smallProductImage,
-                selectedIndex === index && styles.selectedImageBorder, // Thêm viền nếu hình được chọn
+                selectedIndex === index && styles.selectedImageBorder,
               ]}
             />
           </TouchableOpacity>
@@ -128,23 +144,18 @@ export default function App({ navigation }) {
           </View>
         </View>
 
-        <Text style={styles.productName}>Product name</Text>
-        {/* <View>
-          <Text style={styles.productDesc}>Occaecat est deserunt tempor officia</Text>
-          <Image source={require('../assets/img/Rating_3.png')} />
-        </View> */}
-        <View style={styles.priceContainer}>
-          <Text style={styles.productDesc}>Occaecat est deserunt tempor officia</Text>
-          <View >
-            <Image source={require('../assets/img/Rating_3.png')} />
-            <Text>4.5</Text>
-          </View>
+        <Text style={styles.productName}>{productName}</Text>
+
+        {/* Rating */}
+        <View style={styles.ratingContainer}>
+          <Image source={require('../assets/img/Rating_3.png')} style={styles.ratingImage} />
+          <Text style={styles.rating}>{rating}</Text>
         </View>
 
         {/* Size Selector */}
         <Text style={styles.label}>Size</Text>
         <View style={styles.sizeContainer}>
-          {sizes.map((size) => (
+          {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
             <TouchableOpacity
               key={size}
               style={[styles.sizeBox, selectedSize === size && styles.sizeBoxSelected]}
@@ -163,7 +174,7 @@ export default function App({ navigation }) {
           <TouchableOpacity onPress={decreaseQuantity}
             style={[
               styles.quantityButton,
-              pressedButton === 'decrease' && styles.pressedButton, // Đổi màu khi nhấn nút giảm
+              pressedButton === 'decrease' && styles.pressedButton,
             ]}>
             <Text style={styles.quantityText}>-</Text>
           </TouchableOpacity>
@@ -171,7 +182,7 @@ export default function App({ navigation }) {
           <TouchableOpacity onPress={increaseQuantity}
             style={[
               styles.quantityButton,
-              pressedButton === 'increase' && styles.pressedButton, // Đổi màu khi nhấn nút tăng
+              pressedButton === 'increase' && styles.pressedButton,
             ]}>
             <Text style={styles.quantityText}>+</Text>
           </TouchableOpacity>
@@ -265,6 +276,10 @@ const styles = StyleSheet.create({
   productDesc: {
     color: '#6b7280',
     marginBottom: 16,
+  },
+  rating:{
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   label: {
     fontSize: 16,
